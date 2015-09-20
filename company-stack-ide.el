@@ -50,13 +50,14 @@
 (defun company-stack-ide/meta (candidate)
   (get-text-property 0 'meta candidate))
 
-;;;###autoload
 (defun company-stack-ide (command &optional arg &rest ignored)
 	"Company backend that provides completions using the a stack ide process."
 	(interactive (list 'interactive))
 	(cl-case command
 		(interactive (company-begin-backend 'company-stack-ide))
-		(prefix  (company-grab-symbol))
+		(prefix  (and (if stack-mode
+                      (stack-mode-live-p))
+              (company-grab-symbol)))
 		(candidates (company-stack-ide/get-completions arg))
 		(meta (company-stack-ide/meta arg))))
  
